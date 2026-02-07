@@ -38,22 +38,6 @@ stop() {
     ps -ef | grep nginx | grep -v grep | awk '{print $2}' | xargs sudo kill -9
 }
 
-st_clone() {
-    git clone https://github.com/farb3yonddriv3n/hm_$1.git && cd hm_$1/ && git checkout $2 && cd ..
-}
-
-clone() {
-    st_clone "base" "v0.1"
-    st_clone "database" "v0.1"
-    st_clone "gameserver" "v0.2"
-    st_clone "lobbyserver" "v0.1"
-    st_clone "stud" "master"
-    st_clone "nginx" "master"
-    st_clone "web" "v0.1"
-    st_clone "sunwell" "v0.1"
-    st_clone "client" "v0.1"
-}
-
 pull() {
     for i in ${repos[@]}; do
         echo 'Pulling hm_'$i
@@ -115,9 +99,6 @@ build() {
 }
 
 case $1 in
-    clone)
-        clone
-        ;;
     hearthstone_download)
         hearthstone_download
         ;;
@@ -162,8 +143,6 @@ case $1 in
         git clone https://github.com/couchbase/libcouchbase.git
         cd libcouchbase && git checkout 2.9.0 && cmake . && make && sudo make install && sudo ldconfig && cd ..
         sudo pip install couchbase==2.2.4
-        # clone
-        clone
         # hs download
         hearthstone_download
         # couchbase
@@ -180,6 +159,6 @@ case $1 in
         echo 'Installation finished'
         ;;
     *)
-        echo "Usage: ctl.sh {uninstalled|clone|bucket_create|bucket_restore|build|start|stop|pull}" >&2
+        echo "Usage: ctl.sh {uninstalled|bucket_create|bucket_restore|build|start|stop|pull}" >&2
         exit 3
 esac
